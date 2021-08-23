@@ -1,0 +1,100 @@
+openapi: "3.0.0"
+info:
+  title: Endstation Visitor API
+  description: This API is handling visitor data
+  version: 0.0.1
+  
+servers:
+  - url: '{protocol}://127.0.0.1:{port}/api/v1'
+    description: Local Host example
+    variables:
+      port:
+        enum:
+          - '8080'
+        default: '8080'
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+paths:
+  /register:
+    post:
+      summary: "Use this endpoint to create a user and gets it visitorId"
+      operationId: registerVisitor
+      requestBody:
+        description: It is required to send the following request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorVisitorData'
+      responses:
+        '201':
+          description: User got successfuly created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterVisitorResponse'
+  /update/{visitorId}:
+    post:
+      summary: "Use this endpoint to update a user"
+      operationId: updateVisitor
+      parameters:
+        - name: visitorId
+          in: path
+          description: Visitor ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: It is required to send the following request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorVisitorData'
+      responses:
+        '204':
+          description: User got successfuly created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterVisitorResponse'
+                
+components:
+  schemas:
+    VendorVisitorData:
+      required:
+        - username
+        - name
+        - password
+        - email
+      properties:
+        username:
+          type: string
+        name:
+          type: string        
+        password:
+          type: string
+          minLength: 6
+          maxLength: 20
+          example: "test12345666"
+        email:
+          type: string
+          example: "test@web.de"
+          pattern: ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+        iban:
+          type: string
+          minLength: 22
+          maxLength: 22
+          pattern: ^DE([0-9a-zA-Z]\s?){20}$
+    RegisterVisitorResponse:
+      required:
+        - visitorID
+      properties:
+        visitorID:
+          type: string
+          description: "version 4 uuid"
+          example: 64441396-d665-4b91-9924-84c87b5f48ce 
+  
