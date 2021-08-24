@@ -1,0 +1,11 @@
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: endstation-visitor-api
+      MYSQL_USER: visitor-api
+      MYSQL_PASSWORD: local
